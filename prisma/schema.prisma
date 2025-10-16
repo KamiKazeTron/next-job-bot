@@ -1,3 +1,5 @@
+// prisma/schema.prisma
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -8,41 +10,73 @@ generator client {
 }
 
 model User {
-  id           String         @id @default(cuid())
-  name         String
-  email        String         @unique
-  password     String
-  age          Int
-  sex          String
-  address      String
-  phone        String
-  education    String?
-  experience   String?
-  resume       String?
-  portfolio    String?
-  projects     Project[]
-  applications Application[]  // 👈 A user can submit many applications
-  createdAt    DateTime       @default(now())
+  id          String      @id @default(cuid())
+  name        String
+  email       String      @unique
+  password    String
+  age         Int
+  sex         String
+  address     String
+  phone       String
+  education   String
+  experience  String
+  resume      String?
+  portfolio   String?
+  projects    Project[]
+  applications Application[]
+  createdAt   DateTime    @default(now())
 }
 
 model Project {
-  id           String         @id @default(cuid())
-  user         User           @relation(fields: [userId], references: [id])
-  userId       String
-  title        String
-  description  String
-  image        String?
-  applications Application[]  // 👈 A project can receive many applications
-  createdAt    DateTime       @default(now())
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  title       String
+  description String
+  technologies Json       // store array of strings as JSON
+  githubUrl   String?
+  liveUrl     String?
+  image       String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  applicationProjects ApplicationProject[]
 }
 
+model JobOffer {
+  id             String   @id @default(cuid())
+  title          String
+  description    String
+  company        String?
+  budget         Float?
+  deadline       DateTime?
+  skillsRequired Json       // store array of strings as JSON
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  applications   Application[]
+}
+
+
 model Application {
-  id            String   @id @default(cuid())
-  user          User     @relation(fields: [userId], references: [id])
-  userId        String
-  project       Project  @relation(fields: [projectId], references: [id])
+  id          String       @id @default(cuid())
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String
+  jobOffer    JobOffer     @relation(fields: [jobOfferId], references: [id])
+  jobOfferId  String
+  coverLetter String
+  status      String       @default("pending")
+  submittedAt DateTime     @default(now())
+
+  applicationProjects ApplicationProject[]
+}
+
+model ApplicationProject {
+  id            String       @id @default(cuid())
+  application   Application  @relation(fields: [applicationId], references: [id])
+  applicationId String
+  project       Project      @relation(fields: [projectId], references: [id])
   projectId     String
-  coverLetter   String   // generated or user-provided content
-  status        String   @default("pending") // "pending" | "accepted" | "rejected"
-  submittedAt   DateTime @default(now())
+
+  @@unique([applicationId, projectId]) // ensures unique pair
 }
