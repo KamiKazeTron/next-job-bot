@@ -3,16 +3,24 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function ProjectsPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editId, setEditId] = useState(null); // Track which project is being edited
   const [formData, setFormData] = useState({}); // Edit form data
 
   useEffect(() => {
-    fetchProjects();
-  }, []);
+    if (status === "unauthenticated") {
+      router.push("/");
+    } else if (status === "authenticated") {
+      fetchProjects();
+    }
+  }, [status, router]);
 
   const fetchProjects = async () => {
     try {
@@ -72,7 +80,7 @@ export default function ProjectsPage() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (status === "loading" || loading) return <p>Loading...</p>;
 
   return (
     <div>

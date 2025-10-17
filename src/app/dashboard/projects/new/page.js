@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function NewProjectPage() {
+  const { status } = useSession();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -13,7 +16,12 @@ export default function NewProjectPage() {
     liveUrl: "",
     image: "",
   });
-  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/");
+    }
+  }, [status, router]);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,6 +41,8 @@ export default function NewProjectPage() {
       console.error("Error creating project:", error);
     }
   };
+
+  if (status === "loading") return <p>Loading...</p>;
 
   return (
     <div>
