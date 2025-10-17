@@ -4,6 +4,26 @@ import prisma from "../../../../lib/prisma";
 import * as bcrypt from "bcrypt";
 
 export const authOptions = {
+  callbacks: {
+    async session({ session, token, user }) {
+      // Ensure the session includes the user's email and ID
+      if (user) {
+        session.user = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        };
+      } else if (token) {
+        session.user = {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+        };
+      }
+      return session;
+    },
+  },
+
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -44,7 +64,7 @@ export const authOptions = {
       return session;
     },
   },
-  
+
   secret: process.env.NEXTAUTH_SECRET,
 };
 

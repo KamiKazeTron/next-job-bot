@@ -14,7 +14,7 @@ export default function Dashboard() {
               <Link href="/dashboard/projects">Projects</Link>
             </li>
             <li>
-              <Link href="/dashboard/chatbot">Chatbot</Link>
+              <Link href="/dashboard/proposals">Proposals</Link>
             </li>
           </ul>
         </nav>

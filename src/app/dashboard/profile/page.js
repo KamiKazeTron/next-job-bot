@@ -1,6 +1,8 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import  prisma  from "../../../lib/prisma";
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
@@ -52,6 +54,9 @@ export default async function ProfilePage() {
           <span className="font-semibold">Experience:</span> {user.experience}
         </p>
       </div>
+      <Link href="/dashboard/profile/edit" className="mt-6 inline-block">
+        <button>Edit</button>
+      </Link>
     </div>
   );
 }

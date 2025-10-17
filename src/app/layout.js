@@ -1,16 +1,15 @@
+"use client";
 import Navbar from "./components/Navbar";
-
-export const metadata = {
-  title: "Next Job Bot",
-  description: "AI-powered Upwork proposal generator",
-};
+import { SessionProvider } from "next-auth/react";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        <main style={{ padding: "20px" }}>{children}</main>
+        <SessionProvider>
+          <Navbar />
+          <main style={{ padding: "20px" }}>{children}</main>
+        </SessionProvider>
       </body>
     </html>
   );
