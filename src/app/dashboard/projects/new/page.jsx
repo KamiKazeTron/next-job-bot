@@ -67,7 +67,7 @@ export default function NewProjectPage() {
             onChange={handleInputChange}
             placeholder="Technologies (comma-separated)"
             className="w-full p-2 rounded-lg bg-[#476C9B] text-white focus:outline-none focus:ring-2 focus:ring-[#468C98]"
-            required
+            optional
           />
           <button
             type="submit"

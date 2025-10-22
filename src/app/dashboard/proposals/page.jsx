@@ -44,14 +44,13 @@ export default function ProposalsPage() {
     setError(null);
     setSuccess(null);
 
+    // ✅ Split and clean technologies only if not empty
     const techArray = technologies
-      .split(",")
-      .map((t) => t.trim())
-      .filter((t) => t);
-    if (techArray.length === 0) {
-      setError("Please provide at least one technology");
-      return;
-    }
+      ? technologies
+          .split(",")
+          .map((t) => t.trim())
+          .filter((t) => t)
+      : [];
 
     try {
       setLoading(true);
@@ -66,9 +65,6 @@ export default function ProposalsPage() {
     } catch (err) {
       console.error("Failed to create proposal:", err);
       setError(err.response?.data?.error || "Failed to create proposal");
-      if (err.response?.data?.details) {
-        setError(`${err.response.data.error}: ${err.response.data.details}`);
-      }
     } finally {
       setLoading(false);
     }
@@ -94,10 +90,10 @@ export default function ProposalsPage() {
                   key={proposal.id}
                   className="bg-[#476C9B] p-4 rounded-lg shadow-md"
                 >
-                  <p>
-                    <span className="font-semibold"></span>{" "}
+                  <p className="whitespace-pre-line leading-relaxed">
                     {proposal.proposalText}
                   </p>
+
                   <p>
                     <span className="font-semibold">Status:</span>{" "}
                     {proposal.status}
@@ -106,12 +102,6 @@ export default function ProposalsPage() {
                     <p>
                       <span className="font-semibold">Job Offer:</span>{" "}
                       {proposal.jobOffer.title}
-                    </p>
-                  )}
-                  {proposal.project && (
-                    <p>
-                      <span className="font-semibold">Project:</span>{" "}
-                      {proposal.project.title}
                     </p>
                   )}
                 </li>
@@ -144,14 +134,14 @@ export default function ProposalsPage() {
           </div>
           <div>
             <label className="block font-semibold mb-1">
-              Technologies (comma-separated)
+              Technologies (optional, comma-separated)
             </label>
             <input
               type="text"
               value={technologies}
               onChange={(e) => setTechnologies(e.target.value)}
               className="w-full p-2 rounded-lg bg-[#476C9B] text-white focus:outline-none focus:ring-2 focus:ring-[#468C98]"
-              required
+              placeholder="e.g. React, Node.js, Tailwind (optional)"
             />
           </div>
           <div className="mt-4 flex justify-end gap-2">
