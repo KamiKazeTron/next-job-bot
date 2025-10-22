@@ -95,7 +95,7 @@ export default function ProposalsPage() {
                   className="bg-[#476C9B] p-4 rounded-lg shadow-md"
                 >
                   <p>
-                    <span className="font-semibold">Text:</span>{" "}
+                    <span className="font-semibold"></span>{" "}
                     {proposal.proposalText}
                   </p>
                   <p>

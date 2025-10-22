@@ -192,7 +192,7 @@ export async function POST(request) {
       Experience: ${user.experience || "N/A"}
       Portfolio: ${user.portfolio || "N/A"}
 
-      Write a tailored, professional proposal text for this job offer. Keep it concise, highlight relevant experience and skills, and explain why the user is a good fit.
+      Write a tailored, professional proposal text for this job offer. The proposal should consist of mainly 3 portions. In the first portion ask any random question about a problem related to the job offer. In the second portion explain how the user would help solve the problem using their experience and skills. In the third portion highlight the user's information related to the job offer. Keep it concise, highlight relevant experience and skills, and explain why the user is a good fit.
     `;
 
     // ✅ GEMINI API CALL (updated for 2025 models)
