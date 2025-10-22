@@ -33,7 +33,7 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const { title, description, technologies, githubUrl, liveUrl, image } =
+    const { title, description, technologies, } =
       body;
     const project = await prisma.project.create({
       data: {
@@ -41,9 +41,6 @@ export async function POST(request) {
         title,
         description,
         technologies: JSON.parse(technologies), // Expect stringified array from client
-        githubUrl,
-        liveUrl,
-        image,
       },
     });
     return new Response(JSON.stringify(project), { status: 201 });
@@ -64,7 +61,7 @@ export async function PUT(request) {
 
   try {
     const body = await request.json();
-    const { id, title, description, technologies, githubUrl, liveUrl, image } =
+    const { id, title, description, technologies, } =
       body;
     const project = await prisma.project.update({
       where: { id, userId: session.user.id }, // Ensure ownership
@@ -72,9 +69,6 @@ export async function PUT(request) {
         title,
         description,
         technologies: JSON.parse(technologies),
-        githubUrl,
-        liveUrl,
-        image,
       },
     });
     return new Response(JSON.stringify(project), { status: 200 });
